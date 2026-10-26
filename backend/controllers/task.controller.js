@@ -1,4 +1,6 @@
 import { Task } from "../models/Task.js"
+import { Lead } from "../models/Lead.js"
+import { recordLeadActivity } from "../utils/recordLeadActivity.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 
@@ -21,7 +23,14 @@ export const getTasks = asyncHandler(async (req, res) => {
 
 // Create Task
 export const createTask = asyncHandler(async (req, res) => {
+  if (req.body.relatedLead) {
+    const lead = await Lead.exists({ _id: req.body.relatedLead, owner: req.user._id })
+    if (!lead) throw new ApiError(404, "Linked lead not found")
+  }
   const task = await Task.create({ ...req.body, owner: req.user._id })
+  if (task.relatedLead) {
+    await recordLeadActivity(req.user._id, task.relatedLead, "task", "Follow-up created", task.title, task._id)
+  }
 
   res.status(201).json({ success: true, task })
 })
@@ -29,6 +38,13 @@ export const createTask = asyncHandler(async (req, res) => {
 // Update Task
 export const updateTask = asyncHandler(async (req, res) => {
   const { owner, ...updates } = req.body
+  const previous = await Task.findOne({ _id: req.params.id, owner: req.user._id })
+  if (!previous) throw new ApiError(404, "Task not found")
+
+  if (updates.relatedLead) {
+    const lead = await Lead.exists({ _id: updates.relatedLead, owner: req.user._id })
+    if (!lead) throw new ApiError(404, "Linked lead not found")
+  }
 
   if (updates.status === "Completed" && !updates.completedAt) {
     updates.completedAt = new Date()
@@ -46,6 +62,17 @@ export const updateTask = asyncHandler(async (req, res) => {
 
   if (!task) throw new ApiError(404, "Task not found")
 
+  if (task.relatedLead) {
+    const title = previous.status !== "Completed" && task.status === "Completed"
+      ? "Follow-up completed"
+      : previous.status === "Completed" && task.status !== "Completed"
+        ? "Follow-up reopened"
+        : String(previous.relatedLead || "") !== String(task.relatedLead)
+          ? "Follow-up linked"
+          : "Follow-up updated"
+    await recordLeadActivity(req.user._id, task.relatedLead, "task", title, task.title)
+  }
+
   res.json({ success: true, task })
 })
 
@@ -57,6 +84,10 @@ export const deleteTask = asyncHandler(async (req, res) => {
   })
 
   if (!task) throw new ApiError(404, "Task not found")
+
+  if (task.relatedLead) {
+    await recordLeadActivity(req.user._id, task.relatedLead, "task", "Follow-up deleted", task.title)
+  }
 
   res.json({ success: true, message: "Task deleted" })
 })

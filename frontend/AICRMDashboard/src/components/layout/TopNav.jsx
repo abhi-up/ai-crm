@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Search, Bell, Menu, ChevronDown, User, LogOut, Sparkles } from "lucide-react";
+import { Search, Menu, ChevronDown, User, LogOut, Sparkles } from "lucide-react";
+import { FollowUpReminders } from "./FollowUpReminders";
 import {
   Avatar,
   IconButton,
@@ -72,10 +73,7 @@ export function TopNav({ onMenuClick }) {
         <IconButton aria-label="Search" className="hidden sm:inline-flex">
           <Search className="h-[18px] w-[18px]" />
         </IconButton>
-        <IconButton aria-label="Notifications" className="relative">
-          <Bell className="h-[18px] w-[18px]" />
-          <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-surface" />
-        </IconButton>
+        <FollowUpReminders />
 
         <Dropdown
           trigger={

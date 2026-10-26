@@ -16,6 +16,8 @@ export const leadsApi = {
   update: (id, data) => api.put(`/leads/${id}`, data),
   remove: (id) => api.delete(`/leads/${id}`),
   reorder: (updates) => api.patch("/leads/reorder", { updates }),
+  activities: (id) => api.get(`/leads/${id}/activities`),
+  addActivity: (id, data) => api.post(`/leads/${id}/activities`, data),
 }
 
 /* ── Contacts ───────────────────────────────────────────────────────── */
@@ -38,9 +40,18 @@ export const notesApi = {
 /* ── Tasks ──────────────────────────────────────────────────────────── */
 export const tasksApi = {
   list: (params) => api.get("/tasks", { params }),
-  create: (data) => api.post("/tasks", data),
-  update: (id, data) => api.put(`/tasks/${id}`, data),
-  remove: (id) => api.delete(`/tasks/${id}`),
+  create: (data) => api.post("/tasks", data).then((result) => {
+    window.dispatchEvent(new Event("nexora:tasks-changed"));
+    return result;
+  }),
+  update: (id, data) => api.put(`/tasks/${id}`, data).then((result) => {
+    window.dispatchEvent(new Event("nexora:tasks-changed"));
+    return result;
+  }),
+  remove: (id) => api.delete(`/tasks/${id}`).then((result) => {
+    window.dispatchEvent(new Event("nexora:tasks-changed"));
+    return result;
+  }),
 }
 
 /* ── AI (canned mock responses) ─────────────────────────────────────── */

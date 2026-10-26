@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Drawer, Button, Badge, Avatar, Spinner } from "../ui";
 import { AiEmailDialog } from "../ai/AiEmailDialog";
+import { LeadActivitySection } from "./LeadActivitySection";
 import { aiApi } from "../../lib/services";
 import { currency, shortDate } from "../../lib/format";
 import { STAGE_STYLES, PRIORITY_STYLES } from "../../lib/constants";
@@ -145,6 +146,8 @@ export function LeadDrawer({ open, onClose, lead, onEdit, onDelete }) {
         <p className="mt-4 text-center text-xs text-ink-soft">
           Added {shortDate(lead.createdAt)}
         </p>
+
+        <LeadActivitySection key={lead._id} leadId={lead._id} leadName={lead.name} open={open} />
       </Drawer>
 
       <AiEmailDialog open={emailOpen} onClose={() => setEmailOpen(false)} lead={lead} />

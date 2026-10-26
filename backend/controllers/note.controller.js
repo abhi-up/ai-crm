@@ -1,4 +1,6 @@
 import { Note } from "../models/Note.js"
+import { Lead } from "../models/Lead.js"
+import { recordLeadActivity } from "../utils/recordLeadActivity.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 
@@ -26,6 +28,9 @@ export const createNote = asyncHandler(async (req, res) => {
   if (!content) {
     throw new ApiError(400, "Note content is required")
   }
+  if (lead && !(await Lead.exists({ _id: lead, owner: req.user._id }))) {
+    throw new ApiError(404, "Linked lead not found")
+  }
 
   const note = await Note.create({
     owner: req.user._id,
@@ -34,6 +39,7 @@ export const createNote = asyncHandler(async (req, res) => {
     contact: contact || null,
     pinned: Boolean(pinned),
   })
+  if (note.lead) await recordLeadActivity(req.user._id, note.lead, "note", "Note added", note.content, note._id)
 
   res.status(201).json({ success: true, note })
 })
@@ -41,6 +47,9 @@ export const createNote = asyncHandler(async (req, res) => {
 // Update Note
 export const updateNote = asyncHandler(async (req, res) => {
   const { owner, ...updates } = req.body
+  if (updates.lead && !(await Lead.exists({ _id: updates.lead, owner: req.user._id }))) {
+    throw new ApiError(404, "Linked lead not found")
+  }
 
   const note = await Note.findOneAndUpdate(
     { _id: req.params.id, owner: req.user._id },
@@ -49,6 +58,9 @@ export const updateNote = asyncHandler(async (req, res) => {
   )
 
   if (!note) throw new ApiError(404, "Note not found")
+  if (note.lead && updates.content) {
+    await recordLeadActivity(req.user._id, note.lead, "note", "Note updated", note.content)
+  }
 
   res.json({ success: true, note })
 })
@@ -61,6 +73,7 @@ export const deleteNote = asyncHandler(async (req, res) => {
   })
 
   if (!note) throw new ApiError(404, "Note not found")
+  if (note.lead) await recordLeadActivity(req.user._id, note.lead, "note", "Note deleted")
 
   res.json({ success: true, message: "Note deleted" })
 })
