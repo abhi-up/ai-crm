@@ -378,7 +378,7 @@ export default function Notes() {
         />
         <StatTile
           icon={Link2}
-          tint="bg-sky-50 text-sky-600"
+          tint="bg-teal-50 text-teal-700"
           label="Linked"
           value={kpis.linked}
         />

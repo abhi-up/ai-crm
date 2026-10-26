@@ -46,8 +46,8 @@ import { STAGE_STYLES, PRIORITY_STYLES } from "../lib/constants";
 import { useAuth } from "../context/AuthContext";
 import { cn } from "../lib/utils";
 
-/* Donut palette — sky-blue family used for the "Leads by Source" chart. */
-const SOURCE_COLORS = ["#0ea5e9", "#38bdf8", "#0369a1", "#7dd3fc", "#0284c7", "#bae6fd"];
+/* Donut palette — green tones used for the "Leads by Source" chart. */
+const SOURCE_COLORS = ["#047857", "#0d9488", "#10b981", "#34d399", "#65a30d", "#a7f3d0"];
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -427,8 +427,8 @@ function EngagementChart({ trend }) {
     const cx = x + width / 2;
     return (
       <g>
-        <circle cx={cx} cy={y} r={5} fill="#0369a1" stroke="#fff" strokeWidth={2} />
-        <rect x={cx - 26} y={y - 34} width={52} height={22} rx={11} fill="#0369a1" />
+        <circle cx={cx} cy={y} r={5} fill="#047857" stroke="#fff" strokeWidth={2} />
+        <rect x={cx - 26} y={y - 34} width={52} height={22} rx={11} fill="#047857" />
         <text x={cx} y={y - 19} textAnchor="middle" fontSize="11" fontWeight="700" fill="#fff">
           +{growth}%
         </text>
@@ -439,25 +439,25 @@ function EngagementChart({ trend }) {
   return (
     <ResponsiveContainer width="100%" height={280}>
       <BarChart data={trend} barCategoryGap="28%" margin={{ top: 30 }}>
-        <CartesianGrid vertical={false} stroke="#e8eef3" strokeDasharray="4 4" />
+        <CartesianGrid vertical={false} stroke="#deebe5" strokeDasharray="4 4" />
         <XAxis
           dataKey="month"
           axisLine={false}
           tickLine={false}
-          tick={{ fill: "#64748b", fontSize: 12 }}
+          tick={{ fill: "#61766f", fontSize: 12 }}
           dy={6}
         />
         <YAxis
           axisLine={false}
           tickLine={false}
-          tick={{ fill: "#64748b", fontSize: 12 }}
+          tick={{ fill: "#61766f", fontSize: 12 }}
           width={30}
           tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : v)}
         />
-        <Tooltip cursor={{ fill: "#f1f5f9" }} content={<ChartTooltip unit=" leads" />} />
+        <Tooltip cursor={{ fill: "#eef6f2" }} content={<ChartTooltip unit=" leads" />} />
         <Bar dataKey="leads" radius={[14, 14, 14, 14]} maxBarSize={42} label={renderPeak}>
           {trend.map((t, i) => (
-            <Cell key={i} fill={i === maxIndex ? "#0369a1" : "#bae6fd"} />
+            <Cell key={i} fill={i === maxIndex ? "#047857" : "#a7f3d0"} />
           ))}
         </Bar>
       </BarChart>
@@ -471,25 +471,26 @@ function BalanceChart({ trend }) {
       <AreaChart data={trend} margin={{ top: 14, right: 0, left: 0, bottom: 0 }}>
         <defs>
           <linearGradient id="balance" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0ea5e9" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="#0ea5e9" stopOpacity={0} />
+            <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
+            <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <Tooltip content={<ChartTooltip prefix="$" />} />
-        <Area type="monotone" dataKey="won" stroke="#0284c7" strokeWidth={2.5} fill="url(#balance)" />
+        <Tooltip content={<ChartTooltip monetary />} />
+        <Area type="monotone" dataKey="won" stroke="#059669" strokeWidth={2.5} fill="url(#balance)" />
       </AreaChart>
     </ResponsiveContainer>
   );
 }
 
-function ChartTooltip({ active, payload, label, prefix = "", unit = "" }) {
+function ChartTooltip({ active, payload, label, monetary = false, unit = "" }) {
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-xl border border-line bg-surface px-3 py-2 shadow-[var(--shadow-pop)]">
       <p className="text-xs font-medium text-ink-soft">{label}</p>
       <p className="text-sm font-semibold text-ink">
-        {prefix}
-        {Number(payload[0].value).toLocaleString()}
+        {monetary
+          ? currency(payload[0].value)
+          : Number(payload[0].value).toLocaleString("en-IN")}
         {unit}
       </p>
     </div>

@@ -69,7 +69,7 @@ Lead details:
 - Company: ${lead.company || "N/A"}
 - Email: ${lead.email || "N/A"}
 - Current pipeline stage: ${lead.status || "New"}
-- Potential deal value: $${lead.value || 0}
+- Potential deal value (INR): ₹${lead.value || 0}
 - Source: ${lead.source || "Unknown"}
 - Notes: ${lead.notes || "None"}
 

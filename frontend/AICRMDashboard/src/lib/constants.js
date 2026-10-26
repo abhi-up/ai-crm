@@ -21,11 +21,11 @@ export const TASK_PRIORITIES = ["Low", "Medium", "High"];
 
 /** Tailwind class tokens for each lead stage (badge + kanban accents). */
 export const STAGE_STYLES = {
-  New: { dot: "bg-sky-500", badge: "bg-sky-50 text-sky-700", bar: "bg-sky-500" },
+  New: { dot: "bg-teal-500", badge: "bg-teal-50 text-teal-700", bar: "bg-teal-500" },
   Qualified: {
-    dot: "bg-violet-500",
-    badge: "bg-violet-50 text-violet-700",
-    bar: "bg-violet-500",
+    dot: "bg-lime-500",
+    badge: "bg-lime-50 text-lime-700",
+    bar: "bg-lime-500",
   },
   Proposal: {
     dot: "bg-amber-500",
@@ -48,6 +48,6 @@ export const PRIORITY_STYLES = {
 
 export const TASK_STATUS_STYLES = {
   Pending: "bg-slate-100 text-slate-600",
-  "In Progress": "bg-sky-50 text-sky-700",
+  "In Progress": "bg-teal-50 text-teal-700",
   Completed: "bg-brand-50 text-brand-700",
 };

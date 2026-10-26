@@ -260,13 +260,13 @@ export default function Contacts() {
         />
         <StatTile
           icon={Building2}
-          tint="bg-sky-50 text-sky-600"
+          tint="bg-teal-50 text-teal-700"
           label="Companies"
           value={kpis.companies}
         />
         <StatTile
           icon={Tag}
-          tint="bg-violet-50 text-violet-600"
+          tint="bg-lime-50 text-lime-700"
           label="Tagged"
           value={kpis.tagged}
         />

@@ -1,7 +1,7 @@
 {
-  "name": "ai-crm-backend",
+  "name": "nexora-ai-backend",
   "version": "1.0.0",
-  "description": "AI based CRM",
+  "description": "Nexora AI CRM backend",
   "main": "server.js",
   "type": "module",
   "scripts": {

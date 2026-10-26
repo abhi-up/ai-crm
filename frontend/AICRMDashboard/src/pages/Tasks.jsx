@@ -245,7 +245,7 @@ function TaskRow({ task, onToggle, onEdit, onDelete }) {
           done
             ? "text-brand-600 hover:text-brand-400"
             : inProg
-            ? "text-sky-500 hover:text-brand-500"
+            ? "text-teal-600 hover:text-brand-700"
             : "text-ink-soft hover:text-brand-500"
         )}
       >

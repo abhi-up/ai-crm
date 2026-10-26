@@ -204,7 +204,7 @@ export default function Leads() {
     }
     const headers = [
       "Name", "Company", "Email", "Phone", "Stage",
-      "Priority", "Source", "Value", "Created", "Updated",
+      "Priority", "Source", "Value (INR)", "Created", "Updated",
     ];
     // Escape values containing commas, quotes or newlines per RFC 4180.
     const esc = (v) => {
@@ -251,7 +251,7 @@ export default function Leads() {
         <StatTile icon={Users} tint="bg-brand-50 text-brand-600" label="Total leads" value={kpis.count} />
         <StatTile
           icon={TrendingUp}
-          tint="bg-sky-50 text-sky-600"
+          tint="bg-teal-50 text-teal-700"
           label="Open pipeline"
           value={currency(kpis.openValue, { compact: true })}
         />
@@ -263,7 +263,7 @@ export default function Leads() {
         />
         <StatTile
           icon={Coins}
-          tint="bg-violet-50 text-violet-600"
+          tint="bg-lime-50 text-lime-700"
           label="Avg deal size"
           value={currency(kpis.avg, { compact: true })}
         />

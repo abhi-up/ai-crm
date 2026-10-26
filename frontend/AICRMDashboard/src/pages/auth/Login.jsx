@@ -33,17 +33,17 @@ export default function Login() {
     }
   };
 
-  // Convenience: pre-fill the seeded demo credentials.
+  // Convenience: pre-fill the demo account credentials.
   const useDemo = () => {
-    setValue("email", "alex@timetoprogram.com");
-    setValue("password", "Test@1234");
+    setValue("email", "abhi@gmail.com");
+    setValue("password", "123456");
   };
 
   return (
     <AuthShell>
       <h1 className="text-2xl font-bold text-ink">Welcome back</h1>
       <p className="mt-1.5 text-sm text-ink-soft">
-        Sign in to your TTP CRM workspace.
+        Sign in to your Nexora AI workspace.
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4">
