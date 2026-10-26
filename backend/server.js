@@ -42,7 +42,6 @@ app.use("/api/notes", noteRoutes)
 app.use("/api/tasks", taskRoutes)
 
 app.use("/api/ai", aiRoutes)
-
 app.use("/api/analytics", analyticsRoutes)
 
 /* ---------------------- Error handling (last) ---------------------- */
